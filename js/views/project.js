@@ -1,8 +1,8 @@
 $(function(){
     window.ProjectView = Backbone.View.extend({
 
-        //... is a list tag.
-        tagName:  "li",
+        //... is a tr tag.
+        tagName:  "tr",
 
         // Cache the template function for a single item.
         template: _.template($('#project-view').html()),

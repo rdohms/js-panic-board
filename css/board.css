@@ -1,4 +1,76 @@
 body {
     background: #000000;
-    color: #FFFFFF;
+    padding: 2em;
+}
+
+.clear {
+    clear: both;
+}
+
+#projects {
+    font-family: 'Montserrat', Helvetica, sans-serif;
+    color: #ddd;
+    background-color: #333;
+    border: 1px solid #353A3B;
+    border-radius: 0.5em;
+    box-shadow: 0 0.2em 0.4em #000;
+    padding: 0.5em;
+}
+
+#project-list {
+    width: 100%;
+}
+
+
+#project-list th.name {
+    text-align: left;
+    padding-left: 0.5em;
+}
+
+#project-list td {
+    font-size: 2.5em;
+    padding: 0.5em;
+    text-transform: uppercase;
+    text-shadow: 0 1px 0 #888;
+    background-image: -webkit-linear-gradient(bottom, rgb(26,26,26) 45%, rgb(33,33,33) 42%);
+    border: 1px solid #353A3B;
+    border-radius: 0.2em;
+}
+
+#project-list td > span {
+    display: block;
+}
+
+#project-list td.status,
+#project-list td.staging,
+#project-list td.production {
+    text-align: center;
+}
+
+#project-list td.status {
+    width: 20%;
+}
+
+#project-list td.status .building {
+    color: rgba(151, 171, 255, 1.0);
+    text-shadow: 0px -1px 0px #000, 0px 0px 5px rgba(151, 171, 255, 0.8);
+}
+
+#project-list td.status .success {
+    color: rgba(199, 255, 171, 1.0);
+    text-shadow: 0px -1px 0px #000, 0px 0px 5px rgba(199, 255, 171, 0.8);
+}
+
+#project-list td.status .failure {
+    color: rgba(255, 88, 88, 1.0);
+    text-shadow: 0px -1px 0px #000, 0px 0px 5px rgba(255, 88, 88, 0.8);
+}
+
+#project-list td.staging,
+#project-list td.production {
+    width: 10%;
+}
+
+#project-list .starters {
+    display: none;
 }

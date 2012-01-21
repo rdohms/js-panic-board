@@ -5,19 +5,25 @@
 		<title></title>
 		<meta name="description" content="">
 		<meta name="author" content="">
+
+		<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css' />
 		<link rel="stylesheet" href="css/board.css" type="text/css">
 		
 	</head>
 
 	<body>
 		
-		<h1 id="panic_board">Panic Board</h1>
-		
 		<div id="container">
 			<div id="projects">
-			    <ul id="project-list">
-			     
-			    </ul>
+				<table id="project-list">
+					<tr>
+						<th class="name">Name</th>
+						<th class="status">Status</th>
+						<th class="staging">Staging</th>
+						<th class="production">Production</th>
+						<th class="starters">Starters</th>
+					</tr>
+			    </table>
 			</div>
 		</div>
 		
@@ -31,22 +37,19 @@
 		</script>
 		
 		<script type="text/template" id="project-view">
-		    <div class="project">
-		      <ul>
-		          <li class="name"><%= name %></li>
-		          <li class="build_status">
-		          <%
-		          if (job.has('lastBuild')) {
-		          %>
-		          <%= job.get('lastBuild').currentStatus() %>
-		          <%
-		          }
-		          %>
-		          </li>
-		          <li class="versions"><span class="stag"><%= stag_version %></span> | <span class="prod"><%= prod_version %></span></li>
-		          <li class="starters"></li>
-		      </ul>
-		    </div>
+			<td class="name"><span><%= name %></span></td>
+			<td class="status">
+				<% if (job.has('lastBuild')) { %>
+				<span class="<%= job.get('lastBuild').currentStatus() %>">
+					<%= job.get('lastBuild').currentStatus() %>
+				</span>
+				<% } else { %>
+				<span class="none">&nbsp;</span>
+				<% } %>
+	        </td>
+	        <td class="staging"><span><%= stag_version %></span></td>
+	        <td class="production"><span><%= prod_version %></span></td>
+	        <td class="starters"></td>
 		</script>
 		
 		<script type="text/template" id="build-view">
