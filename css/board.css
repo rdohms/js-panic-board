@@ -56,12 +56,12 @@ body {
     text-shadow: 0px -1px 0px #000, 0px 0px 5px rgba(151, 171, 255, 0.8);
 }
 
-#project-list td.status .failure {
+#project-list td.status .success {
     color: rgba(199, 255, 171, 1.0);
     text-shadow: 0px -1px 0px #000, 0px 0px 5px rgba(199, 255, 171, 0.8);
 }
 
-#project-list td.status .success {
+#project-list td.status .failure {
     color: rgba(255, 88, 88, 1.0);
     text-shadow: 0px -1px 0px #000, 0px 0px 5px rgba(255, 88, 88, 0.8);
 }
