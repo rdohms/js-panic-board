@@ -28,13 +28,13 @@ $(function(){
               number:     json.number,
               result:     json.result,
               timestamp:  json.timestamp,
-              status:     json.result,
+              status:     json.result.toLowerCase(),
               tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; }),
           });
       },
       
       currentStatus: function() {
-          if (this.get('building')) return "Building";
+          if (this.get('building')) return "building";
           
           return this.get('status');
       }
