@@ -1,0 +1,15 @@
+{
+    "projects": [
+        {
+            "name": "<Project Name>",
+            "prod_version": "<Version in production>",
+            "stag_version": "<Version in staging>",
+            "sources": [
+                {
+                    "type": "<jenkins|redmine>",
+                    "address": "<url to jenkins without /api/json>"
+                }
+            ]
+        }
+    ]
+}
