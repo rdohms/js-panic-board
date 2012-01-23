@@ -4,7 +4,8 @@ $(function(){
       // Default attributes for a todo item.
       defaults: function() {
         return {
-
+            culprits: new UserList(),
+            authors:  new UserList(),
         };
       },
       
@@ -21,6 +22,15 @@ $(function(){
       },
       
       loadFromJson: function(json) {
+          
+          _.each(json.culprits, function(user){ this.get('culprits').loadUser(user.absoluteUrl, true); }, this);
+          _.each(json.changeSet.items, function(item){ 
+              if(item.author != undefined) { this.get('authors').loadUser(item.author.absoluteUrl, true); } //full url
+              if(item.user != undefined) { this.get('authors').loadUser("http://hubble.webclusive.net:8080/user/"+item.user, true); } //svn user
+          }, this);
+          
+          
+          
           this.set({ 
               building:   json.building,
               changeSet:  json.changeSet,
@@ -31,12 +41,14 @@ $(function(){
               status:     json.result.toLowerCase(),
               tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; }),
           });
+
       },
       
       currentStatus: function() {
           if (this.get('building')) return "building";
           
           return this.get('status');
-      }
+      },
+      
     });
 });

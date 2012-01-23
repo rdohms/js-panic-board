@@ -19,6 +19,7 @@ $(function(){
     initialize: function() {
 
         Projects.fetch();
+        Users.fetch();
 
         Projects.each(function(project){ 
             project.destroy(); }

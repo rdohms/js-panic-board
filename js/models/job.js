@@ -19,8 +19,6 @@ $(function(){
             jsonp: 'jsonp',
             context: this
           });
-              
-              //this.get("url")+'/api/json', this.loadFromJson);
       },
       
       loadFromJson: function(json) {
@@ -35,6 +33,22 @@ $(function(){
           this.get('lastBuild').bind('change', this.change, this);
           this.get('lastSuccessfulBuild').bind('change', this.change, this);
           this.get('builds').each(function(build){ build.bind('change', this.change, this) }, this);
-      }
+      },
+      
+      getBuildAuthors: function() {
+          if (this.has('builds')) {
+              
+              var authors = Array();
+              
+              this.get('builds').each(function (build) {
+                  
+                  authors = _.union(authors, build.get('authors').toArray())
+              }, this);
+              
+          }
+
+          return authors;
+          
+      },
     });
 });

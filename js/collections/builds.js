@@ -2,7 +2,7 @@ $(function(){
     window.BuildList = Backbone.Collection.extend({
 
       model: Build,
-      localStorage: new Store("projects"),
+      localStorage: new Store("builds"),
 
     });
     
