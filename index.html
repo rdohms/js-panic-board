@@ -17,11 +17,10 @@
 			<div id="projects">
 				<table id="project-list">
 					<tr>
-						<th class="name">Name</th>
+						<th class="name">Project</th>
 						<th class="status">Status</th>
 						<th class="staging">Staging</th>
 						<th class="production">Production</th>
-						<th class="starters">Starters</th>
 					</tr>
 			    </table>
 			</div>
@@ -37,7 +36,14 @@
 		</script>
 		
 		<script type="text/template" id="project-view">
-			<td class="name"><span><%= name %></span></td>
+			<td class="name">
+				<span><%= name %></span>
+				<div class="team">
+					<% _.each(job.getBuildAuthors(), function(user) { %>
+	                	<img src="<%= user.gravatar(50) %>" alt="<%= user.get('fullName') %>">
+	            	<% }); %>
+	            </div>
+			</td>
 			<td class="status">
 				<% if (job.has('lastBuild')) { %>
 				<span class="<%= job.get('lastBuild').currentStatus() %>">
@@ -49,11 +55,6 @@
 	        </td>
 	        <td class="staging"><span><%= stag_version %></span></td>
 	        <td class="production"><span><%= prod_version %></span></td>
-	        <td class="starters">
-	            <% _.each(job.getBuildAuthors(), function(user) { %>
-	                <img src="<%= user.gravatar(50) %>" alt="<%= user.get('fullName') %>">
-	            <% }); %>
-	        </td>
 		</script>
 		
 		<script type="text/template" id="build-view">

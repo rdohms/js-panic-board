@@ -41,6 +41,15 @@ body {
     display: block;
 }
 
+#project-list td.name span {
+    float: left;
+}
+
+#project-list td.name .team {
+    float: right;
+    height: 50px;
+}
+
 #project-list td.status,
 #project-list td.staging,
 #project-list td.production {
@@ -70,7 +79,3 @@ body {
 #project-list td.production {
     width: 10%;
 }
-
-/*#project-list .starters {
-    display: none;
-}*/
