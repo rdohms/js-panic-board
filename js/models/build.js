@@ -10,35 +10,46 @@ $(function(){
       },
       
       initialize: function() {
-          
-          $.ajax({
-            url: this.get("url")+'/api/json',
-            success: this.loadFromJson,
-            dataType: 'jsonp',
-            jsonp: 'jsonp',
-            context: this
-          });
-          
+
+
       },
-      
-      loadFromJson: function(json) {
+
+      refresh: function() {
+
+          $.ajax({
+              url: this.get("id")+'/api/json',
+              success: this.populateFromJson,
+              dataType: 'jsonp',
+              jsonp: 'jsonp',
+              context: this
+          });
+
+      },
+
+        populateFromJson: function(json) {
           
-          _.each(json.culprits, function(user){ this.get('culprits').loadUser(user.absoluteUrl, true); }, this);
-          _.each(json.changeSet.items, function(item){ 
-              if(item.author != undefined) { this.get('authors').loadUser(item.author.absoluteUrl, true); } //full url
-              if(item.user != undefined) { this.get('authors').loadUser("http://hubble.webclusive.net:8080/user/"+item.user, true); } //svn user
-          }, this);
-          
-          
-          
-          this.set({ 
+//          _.each(json.culprits, function(user){ this.get('culprits').loadUser(user.absoluteUrl, true); }, this);
+//          _.each(json.changeSet.items, function(item){
+//              if(item.author != undefined) { this.get('authors').loadUser(item.author.absoluteUrl, true); } //full url
+//              if(item.user != undefined) { this.get('authors').loadUser("http://hubble.webclusive.net:8080/user/"+item.user, true); } //svn user
+//          }, this);
+
+          var result = json.result;
+
+          if (result == null) {
+              result = 'Building';
+          }
+
+          this.set({
+              id:         json.url,
+              url:         json.url,
               building:   json.building,
               changeSet:  json.changeSet,
               duration:   json.duration,
               number:     json.number,
               result:     json.result,
               timestamp:  json.timestamp,
-              status:     json.result.toLowerCase(),
+              status:     result.toLowerCase(),
               tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; }),
           });
 

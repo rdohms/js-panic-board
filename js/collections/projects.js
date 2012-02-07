@@ -1,14 +1,14 @@
-$(function(){
+$(function () {
     window.ProjectList = Backbone.Collection.extend({
 
-      model: Project,
-      localStorage: new Store("projects"),
+        model:Project,
+        localStorage: new Store("projects"),
 
-      initialize: function() {
-        
-      },
+        initialize: function () {
+
+        },
 
     });
-    
+
     window.Projects = new ProjectList;
 });
