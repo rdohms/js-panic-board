@@ -10,13 +10,22 @@ $(function () {
         },
 
         initialize: function () {
+            this.bind('change',   this.render, this);
+        },
+
+        render: function() {
+
+            //Render Job Info
+            var view = new ProjectStatusView({model: this});
+            $("#project-"+this.get('project')+" > .status").html(view.render().el);
 
         },
 
         //Refreshes the volatile information of a Job (builds)
         refresh: function(context) {
 
-            //console.log("Updating job: "+context.get('id'));
+            //Update Builds
+            Jenkins.queryApi(context.get('id'), context.updateBuildsFromJson, context);
 
             if (context.get('lastBuild') != false) {
                 context.get('lastBuild').refresh();
@@ -25,6 +34,19 @@ $(function () {
             _.delay(context.refresh, 10000, context);
         },
 
+        //For refreshes
+        updateBuildsFromJson: function(json) {
+
+            if ( ! this.get('lastBuild') || this.get('lastBuild').url != json.lastBuild.url) {
+
+                this.grabBuildInformation( 'lastBuild', json.lastBuild.url );
+                this.grabBuildInformation( 'lastSuccessfulBuild', json.lastSuccessfulBuild.url );
+
+            }
+
+        },
+
+        //For creation
         populateFromJson:function (json) {
 
             this.set({
@@ -32,25 +54,24 @@ $(function () {
                 url: json.url,
                 description:json.description,
                 inQueue:json.inQueue,
+                //TODO: implement past builds processing
                 //builds:new BuildList(_.first(json.builds, 5)),
             });
 
-            this.grabBuildInformation( 'lastBuild', json.lastBuild.url + '/api/json' );
-            this.grabBuildInformation( 'lastSuccessfulBuild', json.lastSuccessfulBuild.url + '/api/json' );
+            this.grabBuildInformation( 'lastBuild', json.lastBuild.url );
+            this.grabBuildInformation( 'lastSuccessfulBuild', json.lastSuccessfulBuild.url );
         },
 
         //Queues build to be loaded into property after json load
         grabBuildInformation: function ( property, url ) {
 
-            $.ajax({
-                url: url,
-                success: function(json) {
+            Jenkins.queryApi(
+                url,
+                function(json) {
                     this.instantiateBuild(property, json)
                 },
-                dataType:'jsonp',
-                jsonp:'jsonp',
-                context:this
-            });
+                this
+            );
         },
 
         //Creates new build with JSON data

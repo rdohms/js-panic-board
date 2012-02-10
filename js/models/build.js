@@ -16,23 +16,14 @@ $(function(){
 
       refresh: function() {
 
-          $.ajax({
-              url: this.get("id")+'/api/json',
-              success: this.populateFromJson,
-              dataType: 'jsonp',
-              jsonp: 'jsonp',
-              context: this
-          });
+          Jenkins.queryApi( this.get('id'), this.populateFromJson, this);
 
+          //TODO: trigger events based on build status: ok -> broken; broken -> ok
       },
 
         populateFromJson: function(json) {
-          
-//          _.each(json.culprits, function(user){ this.get('culprits').loadUser(user.absoluteUrl, true); }, this);
-//          _.each(json.changeSet.items, function(item){
-//              if(item.author != undefined) { this.get('authors').loadUser(item.author.absoluteUrl, true); } //full url
-//              if(item.user != undefined) { this.get('authors').loadUser("http://hubble.webclusive.net:8080/user/"+item.user, true); } //svn user
-//          }, this);
+
+            //TODO Author and user information processing
 
           var result = json.result;
 
@@ -53,6 +44,7 @@ $(function(){
               tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; }),
           });
 
+          this.change();
       },
       
       currentStatus: function() {

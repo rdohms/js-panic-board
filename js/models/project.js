@@ -22,28 +22,19 @@ $(function () {
                 return source.type == 'jenkins';
             });
 
-            var url = source.address + '/api/json';
-
-            $.ajax({
-                url:url,
-                success:this.instantiateJob,
-                dataType:'jsonp',
-                jsonp:'jsonp',
-                context:this
-            });
+            Jenkins.queryApi(source.address, this.instantiateJob, this);
         },
 
         //Creates new Job based on json data
         instantiateJob:function (json) {
 
-            var job = new Job();
+            var job = new Job({project: this.get('id')});
             job.populateFromJson(json);
 
             this.set({job:job});
 
-            //Render Job Info
-            var view = new ProjectStatusView({model: job});
-            $("#project-"+this.get('id')+"-status").html(view.render().el);
+            //Render
+            job.render();
 
             //Start refreshing data
             job.refresh(job);
