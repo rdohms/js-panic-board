@@ -1,54 +1,91 @@
-$(function(){
+$(function () {
     window.Job = Backbone.Model.extend({
 
-      // Default attributes for a todo item.
-      defaults: function() {
-        return {
-          builds:       new BuildList,
-        };
-      },
-      
-      initialize: function() {
-          
-          var url = this.get("url")+'/api/json';
-          
-          $.ajax({
-            url: url,
-            success: this.loadFromJson,
-            dataType: 'jsonp',
-            jsonp: 'jsonp',
-            context: this
-          });
-      },
-      
-      loadFromJson: function(json) {
-          this.set({ 
-              description: json.description,
-              inQueue:     json.inQueue,
-              lastBuild:   new Build(json.lastBuild),
-              lastSuccessfulBuild: new Build(json.lastSuccessfulBuild),
-              builds:      new BuildList( _.first(json.builds, 5) ),
-          });
-          
-          this.get('lastBuild').bind('change', this.change, this);
-          this.get('lastSuccessfulBuild').bind('change', this.change, this);
-          this.get('builds').each(function(build){ build.bind('change', this.change, this) }, this);
-      },
-      
-      getBuildAuthors: function() {
-          if (this.has('builds')) {
-              
-              var authors = Array();
-              
-              this.get('builds').each(function (build) {
-                  
-                  authors = _.union(authors, build.get('authors').toArray())
-              }, this);
-              
-          }
+        // Default attributes for a todo item.
+        defaults:function () {
+            return {
+                builds:new BuildList,
+                lastBuild: false,
+            };
+        },
 
-          return authors;
-          
-      },
+        initialize: function () {
+            this.bind('change',   this.render, this);
+        },
+
+        render: function() {
+
+            //Render Job Info
+            var view = new ProjectStatusView({model: this});
+            $("#project-"+this.get('project')+" > .status").html(view.render().el);
+
+        },
+
+        //Refreshes the volatile information of a Job (builds)
+        refresh: function(context) {
+
+            //Update Builds
+            Jenkins.queryApi(context.get('id'), context.updateBuildsFromJson, context);
+
+            if (context.get('lastBuild') != false) {
+                context.get('lastBuild').refresh();
+            }
+
+            _.delay(context.refresh, 10000, context);
+        },
+
+        //For refreshes
+        updateBuildsFromJson: function(json) {
+
+            if ( ! this.get('lastBuild') || this.get('lastBuild').url != json.lastBuild.url) {
+
+                this.grabBuildInformation( 'lastBuild', json.lastBuild.url );
+                this.grabBuildInformation( 'lastSuccessfulBuild', json.lastSuccessfulBuild.url );
+
+            }
+
+        },
+
+        //For creation
+        populateFromJson:function (json) {
+
+            this.set({
+                id: json.url,
+                url: json.url,
+                description:json.description,
+                inQueue:json.inQueue,
+                //TODO: implement past builds processing
+                //builds:new BuildList(_.first(json.builds, 5)),
+            });
+
+            this.grabBuildInformation( 'lastBuild', json.lastBuild.url );
+            this.grabBuildInformation( 'lastSuccessfulBuild', json.lastSuccessfulBuild.url );
+        },
+
+        //Queues build to be loaded into property after json load
+        grabBuildInformation: function ( property, url ) {
+
+            Jenkins.queryApi(
+                url,
+                function(json) {
+                    this.instantiateBuild(property, json)
+                },
+                this
+            );
+        },
+
+        //Creates new build with JSON data
+        instantiateBuild: function (property, json) {
+
+            var build = new Build();
+            build.populateFromJson(json);
+
+            var data = {};
+            data[property] = build;
+
+            this.set(data);
+
+            build.bind('change', this.change, this);
+        },
     });
 });

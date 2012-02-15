@@ -10,38 +10,41 @@ $(function(){
       },
       
       initialize: function() {
-          
-          $.ajax({
-            url: this.get("url")+'/api/json',
-            success: this.loadFromJson,
-            dataType: 'jsonp',
-            jsonp: 'jsonp',
-            context: this
-          });
-          
+
+
       },
-      
-      loadFromJson: function(json) {
-          
-          _.each(json.culprits, function(user){ this.get('culprits').loadUser(user.absoluteUrl, true); }, this);
-          _.each(json.changeSet.items, function(item){ 
-              if(item.author != undefined) { this.get('authors').loadUser(item.author.absoluteUrl, true); } //full url
-              if(item.user != undefined) { this.get('authors').loadUser("http://hubble.webclusive.net:8080/user/"+item.user, true); } //svn user
-          }, this);
-          
-          
-          
-          this.set({ 
+
+      refresh: function() {
+
+          Jenkins.queryApi( this.get('id'), this.populateFromJson, this);
+
+          //TODO: trigger events based on build status: ok -> broken; broken -> ok
+      },
+
+        populateFromJson: function(json) {
+
+            //TODO Author and user information processing
+
+          var result = json.result;
+
+          if (result == null) {
+              result = 'Building';
+          }
+
+          this.set({
+              id:         json.url,
+              url:         json.url,
               building:   json.building,
               changeSet:  json.changeSet,
               duration:   json.duration,
               number:     json.number,
               result:     json.result,
               timestamp:  json.timestamp,
-              status:     json.result.toLowerCase(),
+              status:     result.toLowerCase(),
               tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; }),
           });
 
+          this.change();
       },
       
       currentStatus: function() {
