@@ -5,10 +5,10 @@ $(function(){
       defaults: function() {
         return {
             culprits: new UserList(),
-            authors:  new UserList(),
+            authors:  new UserList()
         };
       },
-      
+
       initialize: function() {
 
 
@@ -35,12 +35,12 @@ $(function(){
               number:     json.number,
               result:     json.result,
               timestamp:  json.timestamp,
-              tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; }),
+              tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; })
           });
 
           //Care for current status
-          if (json.result != null) {
-              this.set({status: json.result.toLowerCase()})
+          if (json.result !== null) {
+              this.set({status: json.result.toLowerCase()});
           }
 
           this.trigger('change', this);
@@ -48,28 +48,27 @@ $(function(){
           //Triggers broke event.
           if (previousState != this.get('status')) {
 
+              var event = 'fixed';
               if (this.isBroken()){
-                  var event = 'broke';
-              } else {
-                  var event = 'fixed';
+                  event = 'broke';
               }
 
               this.trigger(event, this);
               console.log('Fired event: '+event+' ('+previousState+'|'+this.get('status')+')');
           }
       },
-      
+
       operationStatus: function() {
           if (this.get('building')) return "building";
 
-          if (this.get('status') == undefined) return 'updating';
+          if (this.get('status') === undefined) return 'updating';
 
           return this.get('status');
       },
 
       isBroken: function() {
           return (this.operationStatus() == 'failure');
-      },
-      
+      }
+
     });
 });

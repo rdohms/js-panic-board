@@ -7,7 +7,7 @@ $(function () {
                 prod_version:'0.0.0',
                 stag_version:'0.0.0',
 
-                job:null,
+                job:null
             };
         },
 
@@ -38,6 +38,6 @@ $(function () {
 
             //Start refreshing data
             job.refresh(job);
-        },
+        }
     });
 });

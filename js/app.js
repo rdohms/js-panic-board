@@ -19,10 +19,10 @@ $(function(){
 
         $.getJSON('/js/data.json', function(json){
             $.each(json.projects,function(index) {
-                Projects.create(this)
+                Projects.create(this);
             });
         });
-        
+
         Projects.bind('add',   this.addProject, this);
         Projects.bind('reset', this.addProjects, this);
         Projects.bind('all',   this.render, this);
@@ -33,7 +33,7 @@ $(function(){
     {
         console.log('updating jobs');
         Projects.each(function (project) { project.loadJob();  });
-        
+
         _.delay(context.reloadJobs, 10000, context);
     },
 
@@ -48,9 +48,9 @@ $(function(){
 
     addProjects: function() {
       Projects.each(this.addProject);
-    },
+    }
   });
 
-  window.App = new Dashboard;
+  window.App = new Dashboard();
 
 });

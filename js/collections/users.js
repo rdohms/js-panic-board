@@ -3,15 +3,15 @@ $(function(){
 
       model: User,
       localStorage: new Store("users"),
-      
+
       loadUser: function(url, autoAdd){
-          
+
           var user = Users.get(url);
-          
-          if (user == undefined) {
-              
+
+          if (user === undefined) {
+
               user = new User();
-              
+
               $.ajax({
                   url: url+'/api/json',
                   success: user.loadFromJson,
@@ -19,20 +19,18 @@ $(function(){
                   jsonp: 'jsonp',
                   context: user
                 });
-                
+
           }
-          
+
           if (!autoAdd) {
-              return user
+              return user;
           }
-          
-          if (this.get(url) == undefined) {
+
+          if (this.get(url) === undefined) {
               this.add(user);
           }
-          
-      },
-
+      }
     });
-    
-    window.Users = new UserList;
+
+    window.Users = new UserList();
 });
