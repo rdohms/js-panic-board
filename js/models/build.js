@@ -48,10 +48,9 @@ $(function(){
           //Triggers broke event.
           if (previousState != this.get('status')) {
 
+              var event = 'fixed';
               if (this.isBroken()){
-                  var event = 'broke';
-              } else {
-                  var event = 'fixed';
+                  event = 'broke';
               }
 
               this.trigger(event, this);
