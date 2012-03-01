@@ -23,7 +23,7 @@ $(function(){
           }
 
           if (!autoAdd) {
-              return user
+              return user;
           }
 
           if (this.get(url) === undefined) {
