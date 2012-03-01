@@ -34,5 +34,5 @@ $(function(){
 
     });
 
-    window.Users = new UserList;
+    window.Users = new UserList();
 });
