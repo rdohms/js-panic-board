@@ -40,7 +40,7 @@ $(function(){
 
           //Care for current status
           if (json.result !== null) {
-              this.set({status: json.result.toLowerCase()})
+              this.set({status: json.result.toLowerCase()});
           }
 
           this.trigger('change', this);
