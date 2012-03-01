@@ -39,7 +39,7 @@ $(function(){
           });
 
           //Care for current status
-          if (json.result != null) {
+          if (json.result !== null) {
               this.set({status: json.result.toLowerCase()})
           }
 
@@ -62,7 +62,7 @@ $(function(){
       operationStatus: function() {
           if (this.get('building')) return "building";
 
-          if (this.get('status') == undefined) return 'updating';
+          if (this.get('status') === undefined) return 'updating';
 
           return this.get('status');
       },
