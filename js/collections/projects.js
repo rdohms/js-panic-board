@@ -6,7 +6,7 @@ $(function () {
 
         initialize: function () {
 
-        },
+        }
 
     });
 
