@@ -29,9 +29,7 @@ $(function(){
           if (this.get(url) === undefined) {
               this.add(user);
           }
-
-      },
-
+      }
     });
 
     window.Users = new UserList();
