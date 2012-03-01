@@ -18,39 +18,57 @@ $(function(){
 
           Jenkins.queryApi( this.get('id'), this.populateFromJson, this);
 
-          //TODO: trigger events based on build status: ok -> broken; broken -> ok
       },
 
-        populateFromJson: function(json) {
+      populateFromJson: function(json) {
 
-            //TODO Author and user information processing
+          var previousState = this.get('status');
 
-          var result = json.result;
-
-          if (result == null) {
-              result = 'Building';
-          }
+          //TODO Author and user information processing
 
           this.set({
               id:         json.url,
-              url:         json.url,
+              url:        json.url,
               building:   json.building,
               changeSet:  json.changeSet,
               duration:   json.duration,
               number:     json.number,
               result:     json.result,
               timestamp:  json.timestamp,
-              status:     result.toLowerCase(),
               tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; }),
           });
 
-          this.change();
+          //Care for current status
+          if (json.result != null) {
+              this.set({status: json.result.toLowerCase()})
+          }
+
+          this.trigger('change', this);
+
+          //Triggers broke event.
+          if (previousState != this.get('status')) {
+
+              if (this.isBroken()){
+                  var event = 'broke';
+              } else {
+                  var event = 'fixed';
+              }
+
+              this.trigger(event, this);
+              console.log('Fired event: '+event+' ('+previousState+'|'+this.get('status')+')');
+          }
       },
       
-      currentStatus: function() {
+      operationStatus: function() {
           if (this.get('building')) return "building";
-          
+
+          if (this.get('status') == undefined) return 'updating';
+
           return this.get('status');
+      },
+
+      isBroken: function() {
+          return (this.operationStatus() == 'failure');
       },
       
     });

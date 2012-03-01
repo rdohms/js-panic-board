@@ -10,7 +10,7 @@ $(function () {
         },
 
         initialize: function () {
-            this.bind('change',   this.render, this);
+            this.bind('change', this.render, this);
         },
 
         render: function() {
@@ -27,10 +27,6 @@ $(function () {
             //Update Builds
             Jenkins.queryApi(context.get('id'), context.updateBuildsFromJson, context);
 
-            if (context.get('lastBuild') != false) {
-                context.get('lastBuild').refresh();
-            }
-
             _.delay(context.refresh, 10000, context);
         },
 
@@ -42,6 +38,11 @@ $(function () {
                 this.grabBuildInformation( 'lastBuild', json.lastBuild.url );
                 this.grabBuildInformation( 'lastSuccessfulBuild', json.lastSuccessfulBuild.url );
 
+            } else {
+
+                if (this.get('lastBuild') != false) {
+                    this.get('lastBuild').refresh();
+                }
             }
 
         },
@@ -65,27 +66,37 @@ $(function () {
         //Queues build to be loaded into property after json load
         grabBuildInformation: function ( property, url ) {
 
-            Jenkins.queryApi(
-                url,
-                function(json) {
-                    this.instantiateBuild(property, json)
-                },
-                this
-            );
+            var currentBuild = this.get(property);
+
+            if (!currentBuild) {
+                var build = new Build({id: url});
+                var data = {};
+
+                build.bind('change', this.change, this);
+                build.bind('broke', this.renderCulprit, this);
+                build.bind('fixed', this.hideCulprit, this);
+
+                data[property] = build;
+                this.set(data);
+            }
+
+            this.get(property).set({ id: url});
+            this.get(property).refresh();
+
+            this.trigger('change', this);
         },
 
-        //Creates new build with JSON data
-        instantiateBuild: function (property, json) {
+        renderCulprit: function(build) {
+            console.log('render culprit');
 
-            var build = new Build();
-            build.populateFromJson(json);
+            var view = new ProjectBrokenView({model: build, id: 'project-'+this.get('project')+'-broken'});
+            $("#project-"+this.get('project')).after(view.render().el);
+        },
 
-            var data = {};
-            data[property] = build;
+        hideCulprit: function(data) {
+            console.log('hiding culprit');
 
-            this.set(data);
-
-            build.bind('change', this.change, this);
+            $("#project-"+this.get('project')+"-broken").remove();
         },
     });
 });

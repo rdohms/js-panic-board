@@ -51,22 +51,24 @@
 		
 		<script type="text/template" id="project-status">
             <% if (lastBuild) { %>
-                    <span class="<%= lastBuild.currentStatus() %>">
-                        <%= lastBuild.currentStatus() %>
-                    </span>
+                <span class="<%= lastBuild.operationStatus() %>">
+                    <%= lastBuild.operationStatus() %>
+                </span>
             <% } else { %>
-            <span class="none">&nbsp;</span>
+                <span class="none">&nbsp;</span>
             <% } %>
 		</script>
 
         <script type="text/template" id="project-broken">
-            <% if (lastBuild) { %>
-                    <span class="<%= lastBuild.currentStatus() %>">
-                        <%= lastBuild.currentStatus() %>
-                    </span>
-            <% } else { %>
-            <span class="none">&nbsp;</span>
-            <% } %>
+            <td colspan="4" class="broken">
+                <% if (culprits.length > 0) { %>
+                    <% _.each(culprits, function(culprit) { %>
+                        <p>Responsible: <strong>culprit.fullName</strong></p>
+                    <% }); %>
+                <% } else { %>
+                    <p>Unable to determine culprit, blame frank.</p>
+                <% }%>
+            </td>
         </script>
 
         <script type="text/template" id="build-view">
@@ -94,6 +96,7 @@
 		<!-- Views -->
 		<script src="js/views/project.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/views/project-status.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/views/project-broken.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/views/build.js" type="text/javascript" charset="utf-8"></script>
 
 		<!-- App -->
