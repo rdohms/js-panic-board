@@ -5,10 +5,10 @@ $(function(){
       defaults: function() {
         return {
             culprits: new UserList(),
-            authors:  new UserList(),
+            authors:  new UserList()
         };
       },
-      
+
       initialize: function() {
 
 
@@ -35,7 +35,7 @@ $(function(){
               number:     json.number,
               result:     json.result,
               timestamp:  json.timestamp,
-              tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; }),
+              tests:      _.find(json.actions, function(action){ return action.urlName == 'testReport'; })
           });
 
           //Care for current status
@@ -58,7 +58,7 @@ $(function(){
               console.log('Fired event: '+event+' ('+previousState+'|'+this.get('status')+')');
           }
       },
-      
+
       operationStatus: function() {
           if (this.get('building')) return "building";
 
@@ -69,7 +69,7 @@ $(function(){
 
       isBroken: function() {
           return (this.operationStatus() == 'failure');
-      },
-      
+      }
+
     });
 });
