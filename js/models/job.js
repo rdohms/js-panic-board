@@ -4,8 +4,8 @@ $(function () {
         // Default attributes for a todo item.
         defaults:function () {
             return {
-                builds:new BuildList,
-                lastBuild: false,
+                builds:new BuildList(),
+                lastBuild: false
             };
         },
 
@@ -40,7 +40,7 @@ $(function () {
 
             } else {
 
-                if (this.get('lastBuild') != false) {
+                if (this.get('lastBuild') !== false) {
                     this.get('lastBuild').refresh();
                 }
             }
@@ -54,7 +54,7 @@ $(function () {
                 id: json.url,
                 url: json.url,
                 description:json.description,
-                inQueue:json.inQueue,
+                inQueue:json.inQueue
                 //TODO: implement past builds processing
                 //builds:new BuildList(_.first(json.builds, 5)),
             });
@@ -97,6 +97,6 @@ $(function () {
             console.log('hiding culprit');
 
             $("#project-"+this.get('project')+"-broken").remove();
-        },
+        }
     });
 });
