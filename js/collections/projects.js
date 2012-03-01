@@ -10,5 +10,5 @@ $(function () {
 
     });
 
-    window.Projects = new ProjectList;
+    window.Projects = new ProjectList();
 });
